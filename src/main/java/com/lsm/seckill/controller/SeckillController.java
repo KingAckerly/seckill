@@ -13,7 +13,6 @@ public class SeckillController {
 
     @RequestMapping(value = "/seckill", method = RequestMethod.POST)
     public String seckill(@RequestHeader(value = "userId") Integer userId, @RequestParam(value = "productId") Integer productId) {
-        seckillService.seckill(userId, productId);
-        return "成功";
+        return seckillService.seckill(userId, productId);
     }
 }

@@ -1,8 +1,11 @@
 package com.lsm.seckill.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.lsm.seckill.OrderEntity;
 import com.lsm.seckill.config.RabbitMQConfig;
 import com.lsm.seckill.dto.OrderDTO;
+import com.lsm.seckill.mapper.OrderMapper;
 import com.lsm.seckill.service.ISeckillService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SeckillServiceImpl implements ISeckillService {
+public class SeckillServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> implements ISeckillService {
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -47,9 +50,9 @@ public class SeckillServiceImpl implements ISeckillService {
                 OrderDTO orderDTO = new OrderDTO().setUserId(userId).setProductId(productId);
                 String message = JSON.toJSONString(orderDTO);
                 //发mq消息创建数据库订单
-                rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_EXCHANGE, RabbitMQConfig.ORDER_QUEUE_EXCHANGE_KEY, message);
+                rabbitTemplate.convertAndSend(RabbitMQConfig.PUT_ORDER_QUEUE_EXCHANGE, RabbitMQConfig.PUT_ORDER_QUEUE_EXCHANGE_KEY, message);
                 //发mq消息,超时未支付取消订单
-                rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_EXCHANGE, RabbitMQConfig.ORDER_QUEUE_EXCHANGE_KEY, message);
+                //rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_QUEUE_EXCHANGE, RabbitMQConfig.ORDER_QUEUE_EXCHANGE_KEY, message);
                 return "秒杀成功";
             }
         }

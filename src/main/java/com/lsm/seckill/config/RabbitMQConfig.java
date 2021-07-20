@@ -15,6 +15,26 @@ public class RabbitMQConfig {
      * 订单超时时间-20秒
      */
     private static final long OVER_TIME = 1000 * 20;
+
+
+    /**
+     * 下单队列交换机
+     */
+    public static final String PUT_ORDER_QUEUE_EXCHANGE = "put.order.queue.exchange";
+    /**
+     * 下单队列
+     */
+    public static final String PUT_ORDER_QUEUE = "put.order.queue";
+    /**
+     * 下单交换机到下单队列的路由key
+     */
+    public static final String PUT_ORDER_QUEUE_EXCHANGE_KEY = "put.order.put";
+    /**
+     * 下单交换机到下单队列的路由topic
+     */
+    public String PUT_ORDER_QUEUE_EXCHANGE_TOPIC = "put.order.#";
+
+
     /**
      * 订单队列交换机
      */
@@ -47,6 +67,40 @@ public class RabbitMQConfig {
      * 订单超时死信交换机到订单超时死信队列的路由topic
      */
     public String ORDER_QUEUE_EXCHANGE_DLX_TOPIC = "dlx.order.#";
+
+
+    /**
+     * 下单交换机
+     *
+     * @return
+     */
+    @Bean("putOrderQueueExchange")
+    public Exchange putOrderQueueExchange() {
+        return ExchangeBuilder.topicExchange(PUT_ORDER_QUEUE_EXCHANGE).durable(true).build();
+    }
+
+    /**
+     * 下单队列
+     *
+     * @return
+     */
+    @Bean("putOrderQueue")
+    public Queue putOrderQueue() {
+        return QueueBuilder.durable(PUT_ORDER_QUEUE).build();
+    }
+
+    /**
+     * 下单队列绑定到下单交换机
+     *
+     * @param queue
+     * @param exchange
+     * @return
+     */
+    @Bean
+    public Binding bindingPutOrderQueueExchange(@Qualifier("putOrderQueue") Queue queue, @Qualifier("putOrderQueueExchange") Exchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(PUT_ORDER_QUEUE_EXCHANGE_KEY).noargs();
+    }
+
 
     /**
      * 订单队列交换机

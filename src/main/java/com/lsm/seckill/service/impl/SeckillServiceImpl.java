@@ -48,7 +48,6 @@ public class SeckillServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> im
             Object obj = redisTemplate.execute(luaScriptConfig.putOrder, keys, value);
             if (null != obj) {
                 boolean result = (Boolean) obj;
-                System.out.println(result);
                 if (!result) {
                     return "库存不足";
                 }

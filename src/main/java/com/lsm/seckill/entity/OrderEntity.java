@@ -1,7 +1,5 @@
-package com.lsm.seckill;
+package com.lsm.seckill.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -9,20 +7,20 @@ import java.io.Serializable;
 @TableName("t_order")
 public class OrderEntity implements Serializable {
     private static final long serialVersionUID = -1231421576734185008L;
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+    //@TableId(type = IdType.AUTO)
+    private String uuid;
     private Integer type;
     private Integer status;
     private Integer count;
     private Integer userId;
     private Integer productId;
 
-    public Integer getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public OrderEntity setId(Integer id) {
-        this.id = id;
+    public OrderEntity setUuid(String uuid) {
+        this.uuid = uuid;
         return this;
     }
 
@@ -74,7 +72,7 @@ public class OrderEntity implements Serializable {
     @Override
     public String toString() {
         return "OrderEntity{" +
-                "id=" + id +
+                "uuid='" + uuid + '\'' +
                 ", type=" + type +
                 ", status=" + status +
                 ", count=" + count +

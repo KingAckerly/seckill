@@ -12,11 +12,9 @@ import java.util.Map;
 public class RabbitMQConfig {
 
     /**
-     * 订单超时时间-20秒
+     * 订单超时时间-120秒
      */
-    private static final long OVER_TIME = 1000 * 20;
-
-
+    private static final long OVER_TIME = 1000 * 120;
     /**
      * 下单队列交换机
      */
@@ -33,8 +31,6 @@ public class RabbitMQConfig {
      * 下单交换机到下单队列的路由topic
      */
     public String PUT_ORDER_QUEUE_EXCHANGE_TOPIC = "put.order.#";
-
-
     /**
      * 订单队列交换机
      */
@@ -68,7 +64,6 @@ public class RabbitMQConfig {
      */
     public String ORDER_QUEUE_EXCHANGE_DLX_TOPIC = "dlx.order.#";
 
-
     /**
      * 下单交换机
      *
@@ -98,9 +93,8 @@ public class RabbitMQConfig {
      */
     @Bean
     public Binding bindingPutOrderQueueExchange(@Qualifier("putOrderQueue") Queue queue, @Qualifier("putOrderQueueExchange") Exchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(PUT_ORDER_QUEUE_EXCHANGE_KEY).noargs();
+        return BindingBuilder.bind(queue).to(exchange).with(PUT_ORDER_QUEUE_EXCHANGE_TOPIC).noargs();
     }
-
 
     /**
      * 订单队列交换机

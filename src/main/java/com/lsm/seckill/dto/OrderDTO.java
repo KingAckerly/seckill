@@ -1,8 +1,18 @@
 package com.lsm.seckill.dto;
 
 public class OrderDTO {
+    private String uuid;
     private Integer userId;
     private Integer productId;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public OrderDTO setUuid(String uuid) {
+        this.uuid = uuid;
+        return this;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -25,7 +35,8 @@ public class OrderDTO {
     @Override
     public String toString() {
         return "OrderDTO{" +
-                "userId=" + userId +
+                "uuid='" + uuid + '\'' +
+                ", userId=" + userId +
                 ", productId=" + productId +
                 '}';
     }

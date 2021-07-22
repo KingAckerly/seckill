@@ -40,7 +40,7 @@ public class RabbitMQConsumer extends ServiceImpl<OrderMapper, OrderEntity> {
      * @param message
      */
     @Transactional
-    @RabbitListener(queues = {RabbitMQConfig.PUT_ORDER_QUEUE})
+    @RabbitListener(queues = {RabbitMQConfig.PUT_ORDER_QUEUE}, concurrency = "10")
     public void consumePutOrderQueue(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws Exception {
         OrderDTO orderDTO = JSON.parseObject(message, OrderDTO.class);
         System.out.println("orderDTO:" + orderDTO);
@@ -79,7 +79,7 @@ public class RabbitMQConsumer extends ServiceImpl<OrderMapper, OrderEntity> {
      * @throws Exception
      */
     @Transactional
-    @RabbitListener(queues = {RabbitMQConfig.ORDER_QUEUE_DLX})
+    @RabbitListener(queues = {RabbitMQConfig.ORDER_QUEUE_DLX}, concurrency = "10")
     public void consumeOrderQueueDlx(String message, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws Exception {
         try {
             OrderDTO orderDTO = JSON.parseObject(message, OrderDTO.class);

@@ -6,7 +6,9 @@ import java.io.Serializable;
 
 @TableName("t_order")
 public class OrderEntity implements Serializable {
+
     private static final long serialVersionUID = -1231421576734185008L;
+
     //@TableId(type = IdType.AUTO)
     private String uuid;
     private Integer type;

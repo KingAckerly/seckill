@@ -67,8 +67,14 @@ public class SeckillController {
         return "批量导入Users成功";
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    /**
+     * 测试失败
+     *
+     * @return
+     */
+    @RequestMapping(value = "/fail", method = RequestMethod.GET)
     public String test() {
-        return "test";
+        seckillService.fail();
+        return "fail";
     }
 }

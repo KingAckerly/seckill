@@ -10,4 +10,6 @@ public interface ISeckillService extends IService<OrderEntity> {
     void cancelOrder(Integer userId, OrderDTO orderDTO);
 
     void payCallBack(Integer userId, OrderDTO orderDTO);
+
+    void fail();
 }

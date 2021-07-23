@@ -1,5 +1,7 @@
 package com.lsm.seckill.producer;
 
+import com.alibaba.fastjson.JSON;
+import com.lsm.seckill.dto.OrderDTO;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,7 +26,12 @@ public class RabbitMQProducer implements RabbitTemplate.ConfirmCallback, RabbitT
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+        System.out.println("执行confirm");
         System.out.println("correlationData:" + correlationData);
+        System.out.println("correlationData.returnedMessage:" + correlationData.getReturnedMessage());
+        OrderDTO orderDTO = JSON.parseObject(correlationData.getReturnedMessage().getBody(), OrderDTO.class);
+        System.out.println("orderDTO:" + orderDTO);
+        //将发送到交换机失败的消息记录下来,以便后续补偿
         System.out.println("ack:" + ack);
         System.out.println("cause:" + cause);
     }
@@ -41,6 +48,7 @@ public class RabbitMQProducer implements RabbitTemplate.ConfirmCallback, RabbitT
      */
     @Override
     public void returnedMessage(Message message, int replyCode, String replyText, String exchange, String routingKey) {
+        System.out.println("执行returnedMessage");
         System.out.println("message:" + message);
         System.out.println("replyCode:" + replyCode);
         System.out.println("replyText:" + replyText);

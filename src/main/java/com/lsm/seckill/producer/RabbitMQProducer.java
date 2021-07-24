@@ -31,8 +31,10 @@ public class RabbitMQProducer implements RabbitTemplate.ConfirmCallback, RabbitT
         System.out.println("correlationData.returnedMessage:" + correlationData.getReturnedMessage());
         OrderDTO orderDTO = JSON.parseObject(correlationData.getReturnedMessage().getBody(), OrderDTO.class);
         System.out.println("orderDTO:" + orderDTO);
-        //将发送到交换机失败的消息记录下来,以便后续补偿
         System.out.println("ack:" + ack);
+        if (!ack) {
+            //将发送到交换机失败的消息记录下来,以便后续补偿
+        }
         System.out.println("cause:" + cause);
     }
 
@@ -54,6 +56,9 @@ public class RabbitMQProducer implements RabbitTemplate.ConfirmCallback, RabbitT
         System.out.println("replyText:" + replyText);
         System.out.println("exchange:" + exchange);
         System.out.println("routingKey:" + routingKey);
+        OrderDTO orderDTO = JSON.parseObject(message.getBody(), OrderDTO.class);
+        System.out.println("orderDTO:" + orderDTO);
+        //将发送到交换机失败的消息记录下来,以便后续补偿
     }
 
     /**

@@ -10,15 +10,12 @@ import com.lsm.seckill.entity.OrderEntity;
 import com.lsm.seckill.mapper.OrderMapper;
 import com.lsm.seckill.service.ISeckillService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.amqp.core.ExchangeBuilder;
-import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -109,7 +106,17 @@ public class SeckillServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> im
         OrderDTO order = new OrderDTO().setUuid("这是uuid").setUserId(1).setProductId(1);
         String m = JSON.toJSONString(order);
         CorrelationData correlationData = new CorrelationData("9999");
-        rabbitTemplate.convertAndSend("8888", "7777", m, (message) -> {
+        //测试交换机不存在,生产者发消息到交换机失败
+//        rabbitTemplate.convertAndSend("8888", "7777", m, (message) -> {
+//            //设置回执消息
+//            correlationData.setReturnedMessage(message);
+//            //设置回执消息的 交换器和routingKey
+//            //correlationData.getReturnedMessage().getMessageProperties().setHeader("SEND_EXCHANGE", RabbitConfig.TAXI_OVER_QUEUE_EXCHANGE);
+//            //correlationData.getReturnedMessage().getMessageProperties().setHeader("SEND_ROUTING_KEY", RabbitConfig.TAXI_OVER_KEY);
+//            return message;
+//        }, correlationData);
+        //测试交换机存在,但路由key故意写错,无法到达正确的队列
+        rabbitTemplate.convertAndSend(RabbitMQConfig.PUT_ORDER_QUEUE_EXCHANGE, "7777", m, (message) -> {
             //设置回执消息
             correlationData.setReturnedMessage(message);
             //设置回执消息的 交换器和routingKey
